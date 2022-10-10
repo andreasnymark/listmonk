@@ -3,7 +3,7 @@ ARG PORT ADMIN_PASSWORD ADMIN_USERNAME PGDATABASE PGHOST PGPASSWORD PGPORT PGUSE
 
 
 ADD https://user.fm/files/v2-5d2eb641f2521163f94579c22719017a/listmonk.zip ./
-RUN sudo chown -R $USER listmonk.zip && unzip listmonk.zip && rm listmonk.zip && ls
+RUN chown -R $USER listmonk.zip && unzip listmonk.zip && rm listmonk.zip && ls
 
 
 
