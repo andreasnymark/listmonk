@@ -2,10 +2,11 @@ FROM listmonk/listmonk:latest
 ARG PORT ADMIN_PASSWORD ADMIN_USERNAME PGDATABASE PGHOST PGPASSWORD PGPORT PGUSER
 
 
-ADD https://user.fm/files/v2-5d2eb641f2521163f94579c22719017a/listmonk.zip ./
+ADD https://user.fm/files/v2-5d2eb641f2521163f94579c22719017a/listmonk.zip ./static
+RUN cd ./static
 RUN unzip listmonk.zip && rm listmonk.zip
-RUN ls
-ADD listmonk static
+
+RUN mv ./listmonk ./static
 
 RUN chmod -R 755 ./static
 COPY config.sh ./config.sh
