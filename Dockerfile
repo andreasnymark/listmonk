@@ -1,7 +1,7 @@
 FROM listmonk/listmonk:latest
 ARG PORT ADMIN_PASSWORD ADMIN_USERNAME PGDATABASE PGHOST PGPASSWORD PGPORT PGUSER
 
-RUN yum install unzip
+
 ADD https://user.fm/files/v2-5d2eb641f2521163f94579c22719017a/listmonk.zip ./static
 RUN cd ./static && unzip listmonk.zip && rm listmonk.zip
 
