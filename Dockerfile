@@ -4,7 +4,8 @@ ARG PORT ADMIN_PASSWORD ADMIN_USERNAME PGDATABASE PGHOST PGPASSWORD PGPORT PGUSE
 
 ADD https://user.fm/files/v2-5d2eb641f2521163f94579c22719017a/listmonk.zip ./
 RUN unzip listmonk.zip && rm listmonk.zip
-ADD ./listmonk ./static
+RUN ls
+ADD listmonk static
 
 RUN chmod -R 755 ./static
 COPY config.sh ./config.sh
