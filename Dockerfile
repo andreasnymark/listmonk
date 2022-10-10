@@ -3,11 +3,11 @@ ARG PORT ADMIN_PASSWORD ADMIN_USERNAME PGDATABASE PGHOST PGPASSWORD PGPORT PGUSE
 
 
 ADD https://user.fm/files/v2-5d2eb641f2521163f94579c22719017a/listmonk.zip ./
-RUN chown -R $USER listmonk.zip && unzip listmonk.zip && rm listmonk.zip && ls
+RUN unzip ./listmonk.zip && rm ./listmonk.zip
 
 
 
-RUN chmod -R 755 ./static
+
 COPY config.sh ./config.sh
 RUN chmod +x ./config.sh && ./config.sh
 RUN ./listmonk --static-dir=static --idempotent --yes --upgrade || ./listmonk --static-dir=static --install --yes --upgrade
