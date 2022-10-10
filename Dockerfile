@@ -6,4 +6,4 @@ RUN unzip static.zip && rm static.zip
 
 COPY config.sh ./config.sh
 RUN chmod +x ./config.sh && ./config.sh
-RUN ./listmonk --idempotent --yes --upgrade --static-dir=/static || ./listmonk --install --yes --upgrade --static-dir=/static
+RUN ./listmonk --idempotent --yes --upgrade --static-dir=static || ./listmonk --install --yes --upgrade --static-dir=static
