@@ -1,66 +1,35 @@
-# NOTE: This docker-compose.yml is meant to be just an example guideline
-# on how you can achieve the same. It is not intented to run out of the box
-# and you must edit the below configurations to suit your needs.
-
-version: "3.7"
-
-x-app-defaults: &app-defaults
-  restart: unless-stopped
-  image: listmonk/listmonk:latest
-  ports:
-    - "9000:9000"
-  networks:
-    - listmonk
-  environment:
-    - TZ=Etc/UTC
-
-x-db-defaults: &db-defaults
-  image: postgres:13
-  ports:
-    - "9432:5432"
-  networks:
-    - listmonk
-  environment:
-    - POSTGRES_PASSWORD=listmonk
-    - POSTGRES_USER=listmonk
-    - POSTGRES_DB=listmonk
-  restart: unless-stopped
-  healthcheck:
-    test: ["CMD-SHELL", "pg_isready -U listmonk"]
-    interval: 10s
-    timeout: 5s
-    retries: 6
+captainVersion: 4
 
 services:
-  db:
-    <<: *db-defaults
-    container_name: listmonk_db
-    volumes:
-      - type: volume
-        source: listmonk-data
-        target: /var/lib/postgresql/data
+	listmonk-db:
+		image: postgres:13
+		volumes:
+			- listmonk-db-data:/var/lib/postgresql/data
+		restart: always
+		environment:
+			POSTGRES_USER: 'listmonk'
+			POSTGRES_PASSWORD: 'LKNUSeqFN8xFWG4bxVks3sWgGfbUrlwrNm1k6Q6IuYFNMUr5gAuk'
+			POSTGRES_DB: 'listmonk'
+		caproverExtra:
+			notExposeAsWebApp: 'true'
+	listmonk:
+		environment:
+			TZ: Etc/UTC
+			LISTMONK_db__host: 'srv-captain--listmonk-db'
+			LISTMONK_db__database: 'listmonk'
+			LISTMONK_db__user: 'listmonk'
+			LISTMONK_db__password: 'LKNUSeqFN8xFWG4bxVks3sWgGfbUrlwrNm1k6Q6IuYFNMUr5gAuk'
+			LISTMONK_db__ssl_mode: 'disable'
+			LISTMONK_app__admin_username: 'andnym'
+			LISTMONK_app__admin_password: 'tGZCBHGgY3fmay22UMfE0Xg2Q2cyMQv7s0XJWpGAWUZslNA7wFf4'
+			LISTMONK_app__address: 0.0.0.0:9000
+		caproverExtra:
+			containerHttpPort: 9000
+			dockerfileLines:
+				- FROM listmonk/listmonk:'v2.0.0'
+				- CMD yes | ./listmonk --install --idempotent && ./listmonk
+		volumes:
+			- listmonk-data:/listmonk
+		depends_on:
+			- listmonk-db
 
-  app:
-    <<: *app-defaults
-    container_name: listmonk_app
-    depends_on:
-      - db
-    volumes:
-      - ./config.toml:/listmonk/config.toml
-
-  demo-db:
-    container_name: listmonk_demo_db
-    <<: *db-defaults
-
-  demo-app:
-    <<: *app-defaults
-    container_name: listmonk_demo_app
-    command: [sh, -c, "yes | ./listmonk --install --config config-demo.toml && ./listmonk --config config-demo.toml"]
-    depends_on:
-      - demo-db
-
-networks:
-  listmonk:
-
-volumes:
-  listmonk-data:
