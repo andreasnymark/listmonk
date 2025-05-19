@@ -19,7 +19,7 @@ WORKDIR /listmonk
 COPY --from=builder /listmonk/listmonk .
 
 # Copy your config
-COPY config.toml .
+# COPY config.toml .
 
 # Copy the static folder so --static-dir can use it at runtime
 COPY static/ ./static
